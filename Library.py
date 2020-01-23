@@ -264,8 +264,8 @@ class Library:
         self._current_date += 1  # increment current date by 1
 
         for member in self._members:
-            for i in member.get_checked_out_items():
-                if Library.get_current_date < i.date_checked_out():
-                    over_due = i.date_checked_out() - i.get_current_date()
-                    for i in range(over_due + 1):
-                        member.append_fine(over_due * .1)
+            items_list = member.get_checked_out_items()
+            for item in items_list:
+                over_due = self._current_date - item.date_checked_out()
+                if over_due > item.check_out_length():
+                    member.amend_fine(.10)
