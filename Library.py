@@ -265,52 +265,9 @@ class Library:
 
     def increment_current_date(self):
         self._current_date += 1  # increment current date by 1
-
         for member in self._members:
+
             for item in member.get_checked_out_items():
-                if (self._current_date - LibraryItem.date_checked_out) > LibraryItem.check_out_length:
-                    member.amend_fine(.10)
-
-b1 = Book("345", "Phantom Tollbooth", "Juster")
-a1 = Album("456", "...And His Orchestra", "The Fastbacks")
-m1 = Movie("567", "Laputa", "Miyazaki")
-print(b1.get_author())
-print(a1.get_artist())
-print(m1.get_director())
-
-p1 = Patron("abc", "Felicity")
-p2 = Patron("bcd", "Waldo")
-
-lib = Library()
-lib.add_library_item(b1)
-lib.add_library_item(a1)
-lib.add_patron(p1)
-lib.add_patron(p2)
-
-lib.check_out_library_item("bcd", "456")
-loc = a1.get_location()
-lib.request_library_item("abc", "456")
-for i in range(57):
-    lib.increment_current_date()  # 57 days pass
-p2_fine = p2.get_fine_amount()
-lib.pay_fine("bcd", p2_fine)
-lib.return_library_item("456")
-
-print(p2.get_checked_out_items())
-print(a1.get_date_checked_out())
-print(a1.get_check_out_length())
-print(p2.get_fine_amount())
-print(a1.get_requested_by())
-print(b1.get_author())  # output Juster
-print(a1.get_artist())  # The Fastbacks
-print(m1.get_director())  # Miyazaki
-print(b1.get_id_code())  # 345
-print(b1.get_title())  # Phantom Tollbooth
-print(b1.get_location())  # ON_SHELF
-print(a1.get_location())  # ON_SHELF
-print(m1.get_check_out_length())  # 7
-print(a1.get_checked_out_by())  # None
-print(p1.get_name())  # Felicity
-print(p1.get_id_num())  # abc
-print(p2.get_fine_amount())  # 0
-print(p2.get_fine_amount())  # 0
+                over_due = self._current_date - LibraryItem.date_checked_out
+                if (over_due) > Movie.check_out_length:
+                    member.amend_fine(over_due * .01)
